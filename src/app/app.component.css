@@ -1,0 +1,10 @@
+.toolbar-container {
+    background-color: #0000a0;
+}
+
+.toolbar-container span {
+    color: #ffffff;
+    font-family: sans-serif;
+    margin-left: 10px;
+    font-size: 24px;
+}
