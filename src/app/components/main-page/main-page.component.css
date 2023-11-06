@@ -1,0 +1,28 @@
+.main-site-container { 
+    height: 90%;
+}
+
+.loading-spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.countries-data-container {}
+
+.countries-table-container {}
+
+.flag-column-container {}
+
+.name-column-container {}
+
+.capital-column-container {}
+
+.region-column-container {}
+
+.language-column-container {}
+
+.currencies-column-container {}
+
+.population-column-container {}
