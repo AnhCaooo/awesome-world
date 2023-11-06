@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatButtonModule} from '@angular/material/button';
 
 // COMPONENTS
 import { AppComponent } from './app.component';
@@ -40,6 +42,8 @@ import { NotfoundPageComponent } from './components/notfound-page/notfound-page.
     MatTableModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatMenuModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

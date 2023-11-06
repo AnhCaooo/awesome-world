@@ -1,7 +1,5 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Observable } from 'rxjs';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { RestCountriesService } from 'src/app/services/rest-countries.service';
 
 @Component({
@@ -10,10 +8,11 @@ import { RestCountriesService } from 'src/app/services/rest-countries.service';
   styleUrls: ['./main-page.component.css']
 })
 
-export class MainPageComponent implements OnInit {
+export class MainPageComponent implements OnInit, OnDestroy {
   countries: any[] = [];
   loadingData = false;
-  
+  private subscription$ = new Subscription
+
   constructor (
     private countryService: RestCountriesService,
   ) {
@@ -24,9 +23,15 @@ export class MainPageComponent implements OnInit {
     this.fetchCountries();
   }
 
+  ngOnDestroy(): void {
+    if (this.subscription$) {
+      this.subscription$.unsubscribe();
+    }
+  }
+
   private fetchCountries() {
     this.loadingData = true;
-    this.countryService.getCountries().subscribe({
+    const fetchCountriesSubscription$ = this.countryService.getCountries().subscribe({
       next: (response: any) => {
         this.countries = response
       }, 
@@ -37,6 +42,7 @@ export class MainPageComponent implements OnInit {
         this.loadingData = false;
       }
     })
+    this.subscription$.add(fetchCountriesSubscription$);
   }
 
   public parseLanguagesObjectToString(objectValue: any): string {

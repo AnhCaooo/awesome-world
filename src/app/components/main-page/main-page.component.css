@@ -1,5 +1,29 @@
-.main-site-container { 
+table {
+    position: relative;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    height: 50px;
+    background: #ffffff;
+}
+
+th,
+td {
+    border-bottom: 1px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.main-site-container {
     height: 90%;
+}
+
+.filters-container {
+    margin-left: 20px;
 }
 
 .loading-spinner-container {
@@ -13,16 +37,42 @@
 
 .countries-table-container {}
 
-.flag-column-container {}
+.flag-column-container {
+    width: 5%;
+    text-align: center;
+}
 
-.name-column-container {}
+.name-column-container {
+    width: 20%;
+    text-align: left;
+}
 
-.capital-column-container {}
+.capital-column-container {
+    width: 15%;
+    text-align: left;
+}
 
-.region-column-container {}
+.region-column-container {
+    width: 10%;
+    text-align: left;
+}
 
-.language-column-container {}
+.language-column-container {
+    width: 15%;
+    text-align: left;
+}
 
-.currencies-column-container {}
+.currencies-column-container {
+    width: 10%;
+    text-align: left;
+}
 
-.population-column-container {}
+.population-column-container {
+    width: 10%;
+    text-align: left;
+}
+
+.actions-column-container {
+    width: 5%;
+    text-align: left;
+}

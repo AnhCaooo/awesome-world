@@ -1,59 +1,56 @@
 <div class="main-site-container">
-    <div class="search-country-container">
-        <mat-form-field appearance="outline">
-            <mat-label>Search country</mat-label>
-            <input matInput placeholder="Ex: Finland">
-            <mat-hint>Hint</mat-hint>
-        </mat-form-field>
-    </div>
     <div class="loading-spinner-container" *ngIf="loadingData; else countriesDataReady">
         <mat-spinner></mat-spinner>
         <span>Getting countries data. . .</span>
     </div>
 </div>
 
-
 <ng-template #countriesDataReady>
     <div class="countries-data-container">
-        <mat-paginator
-            [pageSize]="100" 
-            #paginator
-            aria-label="Select countries range">
+        <mat-paginator [pageSize]="100" #paginator aria-label="Select countries range">
         </mat-paginator>
         <table class="countries-table-container" aria-label="countries-table">
             <thead>
                 <tr>
-                    <th>Flag</th>
-                    <th>
+                    <!-- <th></th> -->
+                    <th class="flag-column-container">Flag</th>
+                    <th class="name-column-container ">
                         Name
                     </th>
-                    <th>
+                    <th class="capital-column-container">
                         Capital
                     </th>
-                    <th>
+                    <th class="region-column-container">
                         Region
                     </th>
-                    <th>
+                    <th class="language-column-container">
                         Languages
                     </th>
-                    <th>
-                        Currencies
+                    <th class="currencies-column-container">
+                        Currencies (Symbol)
                     </th>
-                    <th>
+                    <th class="population-column-containers">
                         Population
                     </th>
+                    <th class="actions-column-container">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <ng-container *ngFor="let country of countries">
                     <tr>
-                        <td>{{country.flag}}</td>
-                        <td>{{country.name.official}}</td>
-                        <td>{{country.capital}}</td>
-                        <td>{{country.region}}</td>
-                        <td>{{parseLanguagesObjectToString(country.languages)}}</td>
-                        <td>{{parseCurrenciesObjectToString(country.currencies)}}</td>
-                        <td>{{country.population}}</td>
+                        <!-- <td></td> -->
+                        <td class="flag-column-container">{{country.flag}}</td>
+                        <td class="name-column-container ">{{country.name.official}}</td>
+                        <td class="capital-column-container">{{country.capital}}</td>
+                        <td class="region-column-container">{{country.region}}</td>
+                        <td class="language-column-container">{{parseLanguagesObjectToString(country.languages)}}</td>
+                        <td class="currencies-column-container">{{parseCurrenciesObjectToString(country.currencies)}}</td>
+                        <td class="population-column-container">{{country.population}}</td>
+                        <td class="actions-column-container">
+                            <button mat-icon-button aria-label="Get details for this country">
+                                <mat-icon>more_vert</mat-icon>
+                            </button>
+                        </td>
                     </tr>
                 </ng-container>
             </tbody>
