@@ -45,7 +45,7 @@
                         <td class="region-column-container">{{country.region}}</td>
                         <td class="language-column-container">{{parseLanguagesObjectToString(country.languages)}}</td>
                         <td class="currencies-column-container">{{parseCurrenciesObjectToString(country.currencies)}}</td>
-                        <td class="population-column-container">{{country.population}}</td>
+                        <td class="population-column-container">{{formatPopulation(country.population)}}</td>
                         <td class="actions-column-container">
                             <button mat-icon-button aria-label="Get details for this country">
                                 <mat-icon>more_vert</mat-icon>

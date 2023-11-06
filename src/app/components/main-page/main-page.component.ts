@@ -72,4 +72,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   private convertSetToString(setList: Set<string>): string {
     return Array.from(new Set(setList)).join(", ");
   }
+  public formatPopulation(populationValue: any): string {
+    return String(populationValue).replace(/(.)(?=(\d{3})+$)/g,'$1.')
+  }
 }
