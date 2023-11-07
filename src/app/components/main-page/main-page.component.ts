@@ -51,6 +51,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.option?.valueChanges.subscribe((value) => {
       if (!value || value === 'none') {
         this.value?.disable();
+        this.value?.reset();
       } else {
         this.value?.enable();
       }
@@ -106,9 +107,20 @@ export class MainPageComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  public verifyClearSearchFormButton(): boolean {
+    if (this.option?.value && this.option?.value !== 'none' && this.value?.value) {
+      return false;
+    }
+    return true;
+  }
+
   public clearAndFetchAllCountries() {
     this.searchCountryForm.reset();
     this.fetchCountries();
+  }
+
+  public clearSearchingValue() {
+    this.value?.reset();
   }
 
   public parseLanguagesObjectToString(objectValue: any): string {

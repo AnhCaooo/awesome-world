@@ -16,12 +16,15 @@
                 <mat-form-field class="search-input-container">
                     <mat-label>Country</mat-label>
                     <input matInput placeholder="Ex. Finland" formControlName="value">
+                    <button mat-icon-button matSuffix (click)="clearSearchingValue()" [disabled]="!value?.value">
+                        <mat-icon>close</mat-icon>
+                    </button>
                 </mat-form-field>
 
             </form>
             <div class="confirmation-buttons-container">
                 <button mat-raised-button color="primary" (click)="findCountry()" [disabled]="verifyFindCountryButton()">Find</button>
-                <button mat-raised-button (click)="clearAndFetchAllCountries()">Clear</button>
+                <button mat-raised-button (click)="clearAndFetchAllCountries()" [disabled]="verifyClearSearchFormButton()">Clear</button>
             </div>
         </div>
 
