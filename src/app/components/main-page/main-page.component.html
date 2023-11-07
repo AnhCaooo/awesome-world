@@ -35,7 +35,6 @@
         <table class="countries-table-container" aria-label="countries-table">
             <thead>
                 <tr>
-                    <th class="order-column-container">Order</th>
                     <th class="flag-column-container">Flag</th>
                     <th class="name-column-container">
                         Name 
@@ -58,7 +57,6 @@
                     <th class="population-column-container">
                         Population
                     </th>
-                    <th class="actions-column-container">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -84,19 +82,27 @@
     <ng-container *ngIf="paginatedCountriesData.length > 0; else noDataAvailable">
         <ng-container *ngFor="let country of paginatedCountriesData; index as i">
             <tr>
-                <td class="order-column-container">No {{i + 1}}.</td>
-                <td class="flag-column-container">{{country.flag}}</td>
-                <td class="name-column-container ">{{country.name.common}}</td>
-                <td class="official-name-column-container">{{country.name.official}}</td>
-                <td class="capital-column-container">{{country.capital}}</td>
-                <td class="region-column-container">{{country.region}}</td>
-                <td class="language-column-container">{{parseLanguagesObjectToString(country.languages)}}</td>
-                <td class="currencies-column-container">{{parseCurrenciesObjectToString(country.currencies)}}</td>
-                <td class="population-column-container">{{formatPopulation(country.population)}}</td>
-                <td class="actions-column-container">
-                    <button mat-icon-button aria-label="Get details for this country">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
+                <td class="flag-column-container">
+                    {{country.flag ? country.flag : 'n/a'}}
+                </td>
+                <td class="name-column-container ">
+                    {{country.name.common ? country.name.common : 'n/a'}}
+                </td>
+                <td class="official-name-column-container">
+                    {{country.name.official ? country.name.official : 'n/a'}}
+                </td>
+                <td class="capital-column-container">
+                    {{country.capital ? country.capital : 'n/a'}}</td>
+                <td class="region-column-container">
+                    {{country.region ? country.region : 'n/a'}}</td>
+                <td class="language-column-container">
+                    {{country.languages ? parseLanguagesObjectToString(country.languages) : 'n/a'}}
+                </td>
+                <td class="currencies-column-container">
+                    {{country.currencies ? parseCurrenciesObjectToString(country.currencies) : 'n/a'}}
+                </td>
+                <td class="population-column-container">
+                    {{country.population ? formatPopulation(country.population) : 'n/a'}}
                 </td>
             </tr>
         </ng-container>

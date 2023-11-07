@@ -1,0 +1,10 @@
+.about-card {
+    max-width: 400px;
+    margin: 0 auto; 
+    margin-top: 40px;
+}
+
+.reference-text {
+    font-size: 20px;
+    font-family: sans-serif;
+}

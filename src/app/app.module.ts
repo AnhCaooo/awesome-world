@@ -16,8 +16,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import {MatRadioModule} from '@angular/material/radio';
-
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import {MatCardModule} from '@angular/material/card'; 
 // COMPONENTS
 import { AppComponent } from './app.component';
 import { MainPageComponent } from './components/main-page/main-page.component';
@@ -49,7 +50,9 @@ import { NotfoundPageComponent } from './components/notfound-page/notfound-page.
     ReactiveFormsModule,
     FormsModule,
     MatSelectModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTooltipModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent],

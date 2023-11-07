@@ -9,7 +9,7 @@ th {
     height: 50px;
     background: #ffffff;
     border-top: 1px solid #ddd;
-    border-bottom: 1px solid grey;
+    border-bottom: 1px solid grey;   
 }
 
 td {
@@ -55,14 +55,6 @@ tr:nth-child(even) {
     flex-direction: column;
 }
 
-.countries-data-container {}
-
-
-.order-column-container {
-    white-space: nowrap;
-    width: 5%;
-    text-align: center;
-}
 
 .flag-column-container {
     width: 5%;
@@ -75,7 +67,7 @@ tr:nth-child(even) {
 }
 
 .official-name-column-container {
-    width: 15%;
+    width: 20%;
     text-align: left;
 }
 
@@ -95,16 +87,11 @@ tr:nth-child(even) {
 }
 
 .currencies-column-container {
-    width: 10%;
+    width: 15%;
     text-align: left;
 }
 
 .population-column-container {
     width: 10%;
-    text-align: left;
-}
-
-.actions-column-container {
-    width: 5%;
     text-align: left;
 }

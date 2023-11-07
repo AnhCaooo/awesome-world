@@ -59,7 +59,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
       endIndex = this.initialPageSize;
     }
     this.paginatedCountriesData = this.plainCountriesData.slice(startIndex, endIndex);
-    console.log(this.paginatedCountriesData)
   }
 
   public onPageChange(event: PageEvent) {
