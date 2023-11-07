@@ -1,5 +1,6 @@
 table {
     position: relative;
+    width: 100%;
 }
 
 th {
@@ -22,11 +23,26 @@ tr:nth-child(even) {
     height: 90%;
 }
 
-.filters-container {
+.search-filters-container {
+    display: flex;
     margin-left: 20px;
 }
 
-.loading-spinner-container {
+.filter-option-container {
+    margin-right: 20px;
+}
+
+.search-input-container {
+    min-width: 400px;
+    margin-right: 20px;
+}
+
+.confirmation-buttons-container button {
+    margin-right: 10px;
+}
+
+.loading-spinner-container, .no-data-container {
+    margin-top: 15%;
     display: flex;
     justify-content: center;
     align-items: center;
