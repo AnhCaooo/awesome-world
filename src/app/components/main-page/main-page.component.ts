@@ -22,7 +22,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   initialPageSize: number = 25;
   loadingData = false;
   searchCountryForm = this.fb.group({
-    option: ['', Validators.required],
+    option: [''],
     value: [{ value: '', disabled: true }] // maybe consider to have a validator here.
   })
 
@@ -45,13 +45,36 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.validateSearchForm();
   }
 
-  ngOnDestroy(): void {
-    if (this.subscription$) {
-      this.subscription$.unsubscribe();
-    }
+  public fetchCountries() {
+    this.loadingData = true;
+    const fetchCountriesSubscription$ = this.countryService.getCountries().subscribe({
+      next: (response: any) => {
+        this.setCountriesValuesToVariables(response);
+      }, 
+      error: error => {
+        console.error('Error while fetching countries:', error);
+        this.setCountriesValuesToVariables();
+      }
+    })
+    this.subscription$.add(fetchCountriesSubscription$);
   }
 
-  private getPaginatedPage(startIndex?: number, endIndex?: number) {
+  private setCountriesValuesToVariables(response?: any[]) {
+    this.loadingData = false;
+    if (response) {
+      this.plainCountriesData = response;
+    } else {
+      this.plainCountriesData = [];
+    }
+    this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+    this.getPaginatedPageData();
+  }
+
+  private getAmountOfCountries(data: any[]): number {
+    return data.length; 
+  }
+
+  private getPaginatedPageData(startIndex?: number, endIndex?: number) {
     if (!startIndex) {
       startIndex = 0;
     } 
@@ -59,13 +82,6 @@ export class MainPageComponent implements OnInit, OnDestroy {
       endIndex = this.initialPageSize;
     }
     this.paginatedCountriesData = this.plainCountriesData.slice(startIndex, endIndex);
-  }
-
-  public onPageChange(event: PageEvent) {
-    // Update the table data based on the current page
-    const startIndex = event.pageIndex * event.pageSize;
-    const endIndex = startIndex + event.pageSize;
-    this.getPaginatedPage(startIndex, endIndex);
   }
 
   private validateSearchForm() {
@@ -79,28 +95,17 @@ export class MainPageComponent implements OnInit, OnDestroy {
     });
   }
 
-  private getAmountOfCountries(data: any[]): number {
-    return data.length; 
+  ngOnDestroy(): void {
+    if (this.subscription$) {
+      this.subscription$.unsubscribe();
+    }
   }
 
-  public fetchCountries() {
-    this.loadingData = true;
-    const fetchCountriesSubscription$ = this.countryService.getCountries().subscribe({
-      next: (response: any) => {
-        this.loadingData = false;
-        this.plainCountriesData = response;
-        this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
-        this.getPaginatedPage();
-      }, 
-      error: error => {
-        console.error('Error while fetching countries:', error);
-        this.loadingData = false;
-        this.plainCountriesData = [];
-        this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
-        this.getPaginatedPage();
-      }
-    })
-    this.subscription$.add(fetchCountriesSubscription$);
+  public onPageChange(event: PageEvent) {
+    // Update the table data based on the current page
+    const startIndex = event.pageIndex * event.pageSize;
+    const endIndex = startIndex + event.pageSize;
+    this.getPaginatedPageData(startIndex, endIndex);
   }
 
   public findCountry() {
@@ -112,17 +117,11 @@ export class MainPageComponent implements OnInit, OnDestroy {
       }
       const fetchCountrySubscription$ = this.countryService.getCountries(this.value.value, isFullName).subscribe({
         next: (response: any) => {
-          this.plainCountriesData = response;
-          this.loadingData = false;
-          this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
-          this.getPaginatedPage();
+          this.setCountriesValuesToVariables(response);
         }, 
         error: error => {
           console.error('Error while fetching country:', error)
-          this.loadingData = false;
-          this.plainCountriesData = [];
-          this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
-          this.getPaginatedPage();
+          this.setCountriesValuesToVariables();
         }
       })
       this.subscription$.add(fetchCountrySubscription$);

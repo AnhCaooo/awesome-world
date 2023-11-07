@@ -75,11 +75,10 @@
         </div>
     </div>
 
-
 </div>
 
 <ng-template #countriesData>
-    <ng-container *ngIf="paginatedCountriesData.length > 0; else noDataAvailable">
+    <ng-container *ngIf="paginatedCountriesData.length > 0;">
         <ng-container *ngFor="let country of paginatedCountriesData; index as i">
             <tr>
                 <td class="flag-column-container">

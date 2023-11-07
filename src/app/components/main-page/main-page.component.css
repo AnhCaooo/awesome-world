@@ -42,8 +42,14 @@ tr:nth-child(even) {
     margin-right: 20px;
 }
 
+.confirmation-buttons-container  {
+    display: flex;
+    align-self: center;
+}
+
 .confirmation-buttons-container button {
     margin-right: 10px;
+    flex: auto;
 }
 
 .loading-spinner-container,
@@ -95,3 +101,5 @@ tr:nth-child(even) {
     width: 10%;
     text-align: left;
 }
+
+
