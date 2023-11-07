@@ -1,7 +1,12 @@
 <div class="main-site-container">
     <div class="countries-data-container">
-        <mat-paginator [pageSize]="100" #paginator aria-label="Select countries range">
+        <mat-paginator [length]="totalCountries" 
+            [pageSize]="initialPageSize"
+            [pageSizeOptions]="[25, 50, 100]" aria-label="Select countries range"
+            (page)="onPageChange($event)"
+            showFirstLastButtons>
         </mat-paginator>
+
         <div class="search-filters-container">
             <form [formGroup]="searchCountryForm">
                 <mat-form-field class="filter-option-container">
@@ -20,7 +25,6 @@
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
-
             </form>
             <div class="confirmation-buttons-container">
                 <button mat-raised-button color="primary" (click)="findCountry()" [disabled]="verifyFindCountryButton()">Find</button>
@@ -31,9 +35,13 @@
         <table class="countries-table-container" aria-label="countries-table">
             <thead>
                 <tr>
+                    <th class="order-column-container">Order</th>
                     <th class="flag-column-container">Flag</th>
-                    <th class="name-column-container ">
+                    <th class="name-column-container">
                         Name 
+                    </th>
+                    <th class="official-name-column-container">
+                        Official Name 
                     </th>
                     <th class="capital-column-container">
                         Capital
@@ -54,16 +62,17 @@
                 </tr>
             </thead>
             <tbody>
-                <ng-container *ngIf="!loadingData && countries.length > 0">
+                <ng-container *ngIf="!loadingData">
                     <ng-container *ngTemplateOutlet="countriesData"></ng-container>
                 </ng-container>
             </tbody>
         </table>
+
         <div *ngIf="loadingData" class="loading-spinner-container">
             <mat-spinner></mat-spinner>
             <span>Getting countries data. . .</span>
         </div>
-        <div *ngIf="countries.length === 0">
+        <div *ngIf="plainCountriesData.length === 0">
             <ng-container *ngTemplateOutlet="noDataAvailable"></ng-container>
         </div>
     </div>
@@ -72,11 +81,13 @@
 </div>
 
 <ng-template #countriesData>
-    <ng-container *ngIf="countries.length > 0; else noDataAvailable">
-        <ng-container *ngFor="let country of countries">
+    <ng-container *ngIf="paginatedCountriesData.length > 0; else noDataAvailable">
+        <ng-container *ngFor="let country of paginatedCountriesData; index as i">
             <tr>
+                <td class="order-column-container">No {{i + 1}}.</td>
                 <td class="flag-column-container">{{country.flag}}</td>
                 <td class="name-column-container ">{{country.name.common}}</td>
+                <td class="official-name-column-container">{{country.name.official}}</td>
                 <td class="capital-column-container">{{country.capital}}</td>
                 <td class="region-column-container">{{country.region}}</td>
                 <td class="language-column-container">{{parseLanguagesObjectToString(country.languages)}}</td>

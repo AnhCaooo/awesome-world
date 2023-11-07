@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
+import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 import { RestCountriesService } from 'src/app/services/rest-countries.service';
 
@@ -15,7 +16,10 @@ export class MainPageComponent implements OnInit, OnDestroy {
   public readonly partialNameOption = 'Partial Name';
   public readonly supportedFilteredOptions = [this.fullNameOption, this.partialNameOption]
 
-  countries: any[] = [];
+  paginatedCountriesData: any[] = [];
+  plainCountriesData: any[] = [];
+  totalCountries: number = 0;
+  initialPageSize: number = 25;
   loadingData = false;
   searchCountryForm = this.fb.group({
     option: ['', Validators.required],
@@ -47,6 +51,24 @@ export class MainPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  private getPaginatedPage(startIndex?: number, endIndex?: number) {
+    if (!startIndex) {
+      startIndex = 0;
+    } 
+    if (!endIndex) {
+      endIndex = this.initialPageSize;
+    }
+    this.paginatedCountriesData = this.plainCountriesData.slice(startIndex, endIndex);
+    console.log(this.paginatedCountriesData)
+  }
+
+  public onPageChange(event: PageEvent) {
+    // Update the table data based on the current page
+    const startIndex = event.pageIndex * event.pageSize;
+    const endIndex = startIndex + event.pageSize;
+    this.getPaginatedPage(startIndex, endIndex);
+  }
+
   private validateSearchForm() {
     this.option?.valueChanges.subscribe((value) => {
       if (!value || value === 'none') {
@@ -58,17 +80,25 @@ export class MainPageComponent implements OnInit, OnDestroy {
     });
   }
 
+  private getAmountOfCountries(data: any[]): number {
+    return data.length; 
+  }
+
   public fetchCountries() {
     this.loadingData = true;
     const fetchCountriesSubscription$ = this.countryService.getCountries().subscribe({
       next: (response: any) => {
-        this.countries = response;
         this.loadingData = false;
+        this.plainCountriesData = response;
+        this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+        this.getPaginatedPage();
       }, 
       error: error => {
         console.error('Error while fetching countries:', error);
         this.loadingData = false;
-        this.countries = [];
+        this.plainCountriesData = [];
+        this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+        this.getPaginatedPage();
       }
     })
     this.subscription$.add(fetchCountriesSubscription$);
@@ -83,13 +113,17 @@ export class MainPageComponent implements OnInit, OnDestroy {
       }
       const fetchCountrySubscription$ = this.countryService.getCountries(this.value.value, isFullName).subscribe({
         next: (response: any) => {
-          this.countries = response;
+          this.plainCountriesData = response;
           this.loadingData = false;
+          this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+          this.getPaginatedPage();
         }, 
         error: error => {
           console.error('Error while fetching country:', error)
           this.loadingData = false;
-          this.countries = [];
+          this.plainCountriesData = [];
+          this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+          this.getPaginatedPage();
         }
       })
       this.subscription$.add(fetchCountrySubscription$);
@@ -108,7 +142,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   public verifyClearSearchFormButton(): boolean {
-    if (this.option?.value && this.option?.value !== 'none' && this.value?.value) {
+    if (this.option?.value && this.option?.value !== 'none') {
       return false;
     }
     return true;
