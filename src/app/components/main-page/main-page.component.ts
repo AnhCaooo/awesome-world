@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 import { RestCountriesService } from 'src/app/services/rest-countries.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -39,11 +39,20 @@ export class MainPageComponent implements OnInit, OnDestroy {
     private countryService: RestCountriesService,
     private fb: FormBuilder,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
   ) {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.option?.setValue(params['option']);
+      this.value?.setValue(params['search']);
+    });
   }
 
   ngOnInit(): void {
+  if (this.option?.value && this.value?.value) {
+    this.findCountry();
+  } else {
     this.fetchCountries();
+  }
     this.validateSearchForm();
   }
 
