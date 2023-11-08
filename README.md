@@ -2,6 +2,26 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.9.
 
+## Description
+
+The app can do:
+
+- allow user to find country by full name or partial name 
+- if there is no request or initially, the UI will fetch and show all countries
+- give user the country details which including the country flag, common and official name, etc. 
+- functionalities are covering by Cypress 
+
+### Coming features
+- Responsive table data for mobile screen
+- User should be able to enter a direct URL to web browser address bar to get country details, same result displayed as from point 2 (requirement!)
+- Implement e2e test with Cypress 
+
+## Preparations
+
+Install npm package before use this application.
+
+`npm install`
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
@@ -10,17 +30,15 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The appli
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Running unit tests and end-to-end tests with Cypress
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng e2e` to execute the unit tests and end-to-end tests via [Cypress](https://www.cypress.io/). To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Running unit tests
+If you run `npx cypress open`, you need to execute command `ng serve` at the same time in order to execute the test.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+### End-to-end tests
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+Open Cypress GUI by `ng e2e` or combine `npx cypress open` and `ng serve`, then select **E2E Testing**
 
 ## Further help
 
