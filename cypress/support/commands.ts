@@ -44,6 +44,67 @@
 
 declare namespace Cypress {
     interface Chainable<Subject> {
-
+        loadingSpinnerIconShouldNotExist(): void;
+        loadingSpinnerIconShouldExist(): void;
+        countriesTableBodyShouldExist(): void;
+        noDataAvailableTextNotExist(): void;
+        noDataAvailableTextExist(): void;
+        getAndChooseFilterOption(filter: string): void;
+        buttonShouldBeDisabled(button: string): void;
+        searchInputShouldBeDisabled(): void;
+        searchInputShouldBeEnabled(): void;
     }
 }
+
+
+Cypress.Commands.add("countriesTableBodyShouldExist", () => {
+    cy.get('[data-cy="countries-table"] tbody');
+});
+
+Cypress.Commands.add("loadingSpinnerIconShouldNotExist", () => {
+    cy.get('[data-cy="loading-spinner"]').should('not.exist');
+});
+
+Cypress.Commands.add("loadingSpinnerIconShouldExist", () => {
+    cy.get('[data-cy="loading-spinner"]').should('exist');
+});
+
+Cypress.Commands.add("noDataAvailableTextNotExist", () => {
+    cy.get('[data-cy="no-data-container"]').should('not.exist');
+});
+
+Cypress.Commands.add("noDataAvailableTextExist", () => {
+    cy.get('[data-cy="no-data-container"]').should('exist');
+});
+
+Cypress.Commands.add("getAndChooseFilterOption", (filter: string) => {
+    cy.get('[data-cy="filter-select"]').click();
+    cy.get(`[data-cy="${filter}"]`).click();
+    cy.get('[data-cy="option-form-field"]')
+        .invoke('text').then(text => text.includes(filter));
+});
+
+Cypress.Commands.add("buttonShouldBeDisabled", (button: string) => {
+    cy.get(`[data-cy=${button}]`).should('be.disabled');
+});
+
+Cypress.Commands.add("searchInputShouldBeDisabled", () => {
+    cy.get('[data-cy="country-search-input"]').should('be.disabled');
+});
+
+
+Cypress.Commands.add("searchInputShouldBeEnabled", () => {
+    cy.get('[data-cy="country-search-input"]').should('be.enabled');
+});
+
+// Cypress.Commands.add("loadingSpinnerIconShouldNotExist", () => {
+//     cy.get('[data-cy="loading-spinner"]').should('not.exist');
+// });
+
+// Cypress.Commands.add("loadingSpinnerIconShouldNotExist", () => {
+//     cy.get('[data-cy="loading-spinner"]').should('not.exist');
+// });
+
+// Cypress.Commands.add("loadingSpinnerIconShouldNotExist", () => {
+//     cy.get('[data-cy="loading-spinner"]').should('not.exist');
+// });

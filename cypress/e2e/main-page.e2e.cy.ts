@@ -2,14 +2,16 @@ describe('Test world application', () => {
 
   beforeEach(() => {
     cy.visit('/')
+    cy.countriesTableBodyShouldExist();
+    cy.loadingSpinnerIconShouldNotExist();
+    cy.noDataAvailableTextNotExist();
   });
 
-  it('table data should contain country values', () => {
-
-  });
-
-  it('choose "None" option and both Find and Clear button should be still disabled', () => {
-
+  it.only('choose "None" option and both Find and Clear button should be still disabled', () => {
+    cy.getAndChooseFilterOption('none');
+    // cy.searchInputShouldBeDisabled();
+    cy.buttonShouldBeDisabled('find-button');
+    cy.buttonShouldBeDisabled('clear-button');
   });
 
   it('choose "Full Name" option then input field and Clear button is enabled', () => {

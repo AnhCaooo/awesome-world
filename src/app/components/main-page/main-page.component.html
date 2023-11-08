@@ -9,30 +9,30 @@
 
         <div class="search-filters-container">
             <form [formGroup]="searchCountryForm">
-                <mat-form-field class="filter-option-container">
+                <mat-form-field class="filter-option-container" data-cy="filter-select">
                     <mat-label>Filter by</mat-label>
-                    <mat-select placeholder="Select filter by" formControlName="option">
-                        <mat-option value="none">none</mat-option>
-                        <mat-option *ngFor="let option of supportedFilteredOptions" [value]="option">
+                    <mat-select placeholder="Select filter by" formControlName="option" data-cy="option-form-field">
+                        <mat-option value="none" data-cy="none">none</mat-option>
+                        <mat-option *ngFor="let option of supportedFilteredOptions" [value]="option" [attr.data-cy]="option">
                             {{option}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
-                <mat-form-field class="search-input-container">
+                <mat-form-field class="search-input-container" data-cy="country-search-input">
                     <mat-label>Country</mat-label>
                     <input matInput placeholder="Ex. Finland" formControlName="value">
-                    <button mat-icon-button matSuffix (click)="clearSearchingValue()" [disabled]="!value?.value">
+                    <button mat-icon-button matSuffix (click)="clearSearchingValue()" data-cy="clear-search-text" [disabled]="!value?.value">
                         <mat-icon>close</mat-icon>
                     </button>
                 </mat-form-field>
             </form>
             <div class="confirmation-buttons-container">
-                <button mat-raised-button color="primary" (click)="findCountry()" [disabled]="verifyFindCountryButton()">Find</button>
-                <button mat-raised-button (click)="clearAndFetchAllCountries()" [disabled]="verifyClearSearchFormButton()">Clear</button>
+                <button mat-raised-button color="primary" (click)="findCountry()" [disabled]="verifyFindCountryButton()" data-cy="find-button">Find</button>
+                <button mat-raised-button (click)="clearAndFetchAllCountries()" [disabled]="verifyClearSearchFormButton()" data-cy="clear-button">Clear</button>
             </div>
         </div>
 
-        <table class="countries-table-container" aria-label="countries-table">
+        <table class="countries-table-container" aria-label="countries-table" data-cy="countries-table">
             <thead>
                 <tr>
                     <th class="flag-column-container">Flag</th>
@@ -66,11 +66,11 @@
             </tbody>
         </table>
 
-        <div *ngIf="loadingData" class="loading-spinner-container">
+        <div *ngIf="loadingData" class="loading-spinner-container" data-cy="loading-spinner">
             <mat-spinner></mat-spinner>
             <span>Getting countries data. . .</span>
         </div>
-        <div *ngIf="plainCountriesData.length === 0">
+        <div *ngIf="!loadingData && plainCountriesData.length === 0">
             <ng-container *ngTemplateOutlet="noDataAvailable"></ng-container>
         </div>
     </div>
@@ -111,7 +111,7 @@
 </ng-template>
 
 <ng-template #noDataAvailable>
-    <div class="no-data-container">
+    <div class="no-data-container" data-cy="no-data-container">
         <span>No country found</span>
     </div>
 </ng-template>

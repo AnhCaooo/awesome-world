@@ -6,15 +6,14 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 The app can do:
 
-- allow user to find country by full name or partial name 
+- allow user to find country by full name or partial name
 - if there is no request or initially, the UI will fetch and show all countries
-- give user the country details which including the country flag, common and official name, etc. 
-- functionalities are covering by Cypress 
+- give user the country details which including the country flag, common and official name, etc.
+- user is able to enter a direct URL to web browser address bar to get country details, same result displayed as manual filter
+- functionalities are covering by Cypress
 
 ### Coming features
 - Responsive table data for mobile screen
-- User should be able to enter a direct URL to web browser address bar to get country details, same result displayed as from point 2 (requirement!)
-- Implement e2e test with Cypress 
 
 ## Preparations
 
