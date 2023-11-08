@@ -3,11 +3,11 @@
 </mat-toolbar>
 
 <nav mat-tab-nav-bar [tabPanel]="tabPanel">
-  <a mat-tab-link 
-    *ngFor="let link of links;" 
-    #rla="routerLinkActive" 
+  <a mat-tab-link
+    *ngFor="let link of links;"
+    #rla="routerLinkActive"
     routerLinkActive="active"
-    [routerLink]="link.route" 
+    [routerLink]="link.route"
     [active]="rla.isActive"> {{link.name}} </a>
 </nav>
 <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>

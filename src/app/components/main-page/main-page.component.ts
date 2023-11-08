@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
 import { Subscription } from 'rxjs';
 import { RestCountriesService } from 'src/app/services/rest-countries.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -12,8 +13,8 @@ import { RestCountriesService } from 'src/app/services/rest-countries.service';
 
 export class MainPageComponent implements OnInit, OnDestroy {
   private subscription$ = new Subscription
-  public readonly fullNameOption = 'Full Name';
-  public readonly partialNameOption = 'Partial Name';
+  public readonly fullNameOption = 'full_name';
+  public readonly partialNameOption = 'partial_name';
   public readonly supportedFilteredOptions = [this.fullNameOption, this.partialNameOption]
 
   paginatedCountriesData: any[] = [];
@@ -37,6 +38,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
   constructor (
     private countryService: RestCountriesService,
     private fb: FormBuilder,
+    private router: Router,
   ) {
   }
 
@@ -50,13 +52,14 @@ export class MainPageComponent implements OnInit, OnDestroy {
     const fetchCountriesSubscription$ = this.countryService.getCountries().subscribe({
       next: (response: any) => {
         this.setCountriesValuesToVariables(response);
-      }, 
+      },
       error: error => {
         console.error('Error while fetching countries:', error);
         this.setCountriesValuesToVariables();
       }
     })
     this.subscription$.add(fetchCountriesSubscription$);
+    this.updateUrl();
   }
 
   private setCountriesValuesToVariables(response?: any[]) {
@@ -71,13 +74,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
   }
 
   private getAmountOfCountries(data: any[]): number {
-    return data.length; 
+    return data.length;
   }
 
   private getPaginatedPageData(startIndex?: number, endIndex?: number) {
     if (!startIndex) {
       startIndex = 0;
-    } 
+    }
     if (!endIndex) {
       endIndex = this.initialPageSize;
     }
@@ -118,7 +121,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
       const fetchCountrySubscription$ = this.countryService.getCountries(this.value.value, isFullName).subscribe({
         next: (response: any) => {
           this.setCountriesValuesToVariables(response);
-        }, 
+        },
         error: error => {
           console.error('Error while fetching country:', error)
           this.setCountriesValuesToVariables();
@@ -126,10 +129,19 @@ export class MainPageComponent implements OnInit, OnDestroy {
       })
       this.subscription$.add(fetchCountrySubscription$);
     }
+    this.updateUrl();
   }
 
+  private updateUrl() {
+    let url: string = 'main';
+    if (this.option?.value && this.value?.value) {
+      url += `?option=${this.option?.value}&search=${this.value?.value}`;
+    }
+    this.router.navigateByUrl(url);
+}
+
   /**
-   * 
+   *
    * @returns true means disable button. False means enable
    */
   public verifyFindCountryButton(): boolean {

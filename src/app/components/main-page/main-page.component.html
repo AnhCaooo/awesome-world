@@ -1,6 +1,6 @@
 <div class="main-site-container">
     <div class="countries-data-container">
-        <mat-paginator [length]="totalCountries" 
+        <mat-paginator [length]="totalCountries"
             [pageSize]="initialPageSize"
             [pageSizeOptions]="[25, 50, 100]" aria-label="Select countries range"
             (page)="onPageChange($event)"
@@ -12,7 +12,7 @@
                 <mat-form-field class="filter-option-container">
                     <mat-label>Filter by</mat-label>
                     <mat-select placeholder="Select filter by" formControlName="option">
-                        <mat-option value="none">None</mat-option>
+                        <mat-option value="none">none</mat-option>
                         <mat-option *ngFor="let option of supportedFilteredOptions" [value]="option">
                             {{option}}
                         </mat-option>
@@ -37,10 +37,10 @@
                 <tr>
                     <th class="flag-column-container">Flag</th>
                     <th class="name-column-container">
-                        Name 
+                        Name
                     </th>
                     <th class="official-name-column-container">
-                        Official Name 
+                        Official Name
                     </th>
                     <th class="capital-column-container">
                         Capital
@@ -82,7 +82,9 @@
         <ng-container *ngFor="let country of paginatedCountriesData; index as i">
             <tr>
                 <td class="flag-column-container">
-                    {{country.flag ? country.flag : 'n/a'}}
+                    <span style="display: inline-block;">
+                        <img src={{country.flags.png}} alt='country-flat-image'>
+                    </span>
                 </td>
                 <td class="name-column-container ">
                     {{country.name.common ? country.name.common : 'n/a'}}
