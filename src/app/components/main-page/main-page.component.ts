@@ -49,12 +49,15 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.activatedRoute.queryParams.subscribe(params => {
       if (params['option']) {
         this.option?.setValue(params['option']);
+        this.option?.enable();
       }
       if (params['search']) {
         this.value?.setValue(params['search']);
+        this.value?.enable()
       }
       if (params['country']) {
         this.option?.setValue('none');
+        this.value?.disable();
         this.countryFromUrl = params['country'];
       }
       if (!params) {
@@ -89,7 +92,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
         this.setPaginatedPageData();
       },
       complete: () => {
-        if (this.option?.value === 'none' && this,this.countryFromUrl) {
+        if (this.option?.value === 'none' && this.countryFromUrl) {
           this.findCountryAndUpdateUrlWhenRowIsClicked(this.countryFromUrl);
         }
       }
@@ -183,7 +186,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
    * @returns true means disable button. False means enable
    */
   public verifyFindCountryButton(): boolean {
-    if (this.value?.value && this.option?.value !== 'none') {
+    if (this.value?.value && this.option?.value !== 'none' && !this.loadingData) {
       return false;
     }
     return true;
@@ -194,7 +197,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
    * @returns true means disable button. False means enable
    */
   public verifyClearSearchFormButton(): boolean {
-    if (this.option?.value) {
+    if (this.option?.value && !this.loadingData) {
       return false;
     }
     return true;

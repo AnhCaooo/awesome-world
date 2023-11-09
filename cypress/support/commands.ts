@@ -51,8 +51,13 @@ declare namespace Cypress {
         noDataAvailableTextExist(): void;
         getAndChooseFilterOption(filter: string): void;
         buttonShouldBeDisabled(button: string): void;
-        searchInputShouldBeDisabled(): void;
-        searchInputShouldBeEnabled(): void;
+        buttonShouldBeEnabled(button: string): void;
+        clickButton(button: string): void;
+        typeSearchValue(value: string): void;
+        clickClearSearchValueButton(): void;
+        tableDataShouldHasOnlyOneRow(): void;
+        tableDataShouldHasMoreOneRow(): void;
+        getNoDataAvailableText(): void;
     }
 }
 
@@ -88,23 +93,31 @@ Cypress.Commands.add("buttonShouldBeDisabled", (button: string) => {
     cy.get(`[data-cy=${button}]`).should('be.disabled');
 });
 
-Cypress.Commands.add("searchInputShouldBeDisabled", () => {
-    cy.get('[data-cy="country-search-input"]').should('be.disabled');
+Cypress.Commands.add("buttonShouldBeEnabled", (button: string) => {
+    cy.get(`[data-cy=${button}]`).should('be.enabled');
 });
 
-
-Cypress.Commands.add("searchInputShouldBeEnabled", () => {
-    cy.get('[data-cy="country-search-input"]').should('be.enabled');
+Cypress.Commands.add("clickButton", (button: string) => {
+    cy.get(`[data-cy=${button}]`).should('be.enabled').click();
 });
 
-// Cypress.Commands.add("loadingSpinnerIconShouldNotExist", () => {
-//     cy.get('[data-cy="loading-spinner"]').should('not.exist');
-// });
+Cypress.Commands.add("typeSearchValue", (value: string) => {
+    cy.get('[data-cy="country-search-input"]').type(value);
 
-// Cypress.Commands.add("loadingSpinnerIconShouldNotExist", () => {
-//     cy.get('[data-cy="loading-spinner"]').should('not.exist');
-// });
+});
 
-// Cypress.Commands.add("loadingSpinnerIconShouldNotExist", () => {
-//     cy.get('[data-cy="loading-spinner"]').should('not.exist');
-// });
+Cypress.Commands.add("clickClearSearchValueButton", () => {
+    cy.get('[data-cy="clear-search-text"]').should('be.enabled').click();
+});
+
+Cypress.Commands.add("tableDataShouldHasOnlyOneRow", () => {
+    cy.get('[data-cy="countries-table"] tbody tr').should('have.length', 1);
+});
+
+Cypress.Commands.add("getNoDataAvailableText", () => {
+    cy.get('[data-cy="no-data-container"]');
+});
+
+Cypress.Commands.add("tableDataShouldHasMoreOneRow", () => {
+    cy.get('[data-cy="countries-table"] tbody tr').should('have.length.greaterThan', 1);
+});

@@ -79,7 +79,7 @@
 <ng-template #countriesData>
     <ng-container *ngIf="paginatedCountriesData.length > 0;">
         <ng-container *ngFor="let country of paginatedCountriesData;" >
-            <tr style="cursor: pointer;" (click)="findCountryAndUpdateUrlWhenRowIsClicked(country.name.common)">
+            <tr style="cursor: pointer;" (click)="findCountryAndUpdateUrlWhenRowIsClicked(country.name.common)" [attr.data-cy]="country.name.common">
                 <td class="flag-column-container">
                     <span style="display: inline-block;">
                         <img src={{country.flags.png}} alt='country-flat-image'>
