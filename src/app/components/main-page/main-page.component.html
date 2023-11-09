@@ -1,26 +1,19 @@
 <div class="main-site-container">
     <div class="countries-data-container">
-        <mat-paginator [length]="totalCountries"
-            [pageSize]="initialPageSize"
-            [pageSizeOptions]="[25, 50, 100]" aria-label="Select countries range"
-            (page)="onPageChange($event)"
-            showFirstLastButtons>
-        </mat-paginator>
-
         <div class="search-filters-container">
             <form [formGroup]="searchCountryForm">
                 <mat-form-field class="filter-option-container" data-cy="filter-select">
                     <mat-label>Filter by</mat-label>
                     <mat-select placeholder="Select filter by" formControlName="option" data-cy="option-form-field">
-                        <mat-option value="none" data-cy="none">none</mat-option>
+                        <mat-option value="none" data-cy="none">None</mat-option>
                         <mat-option *ngFor="let option of supportedFilteredOptions" [value]="option" [attr.data-cy]="option">
-                            {{option}}
+                            {{formatSnakeCaseToNormal(option)}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
                 <mat-form-field class="search-input-container" data-cy="country-search-input">
                     <mat-label>Country</mat-label>
-                    <input matInput placeholder="Ex. Finland" formControlName="value">
+                    <input matInput placeholder="Ex. Finland" formControlName="value" (keydown.enter)="$event.preventDefault()">
                     <button mat-icon-button matSuffix (click)="clearSearchingValue()" data-cy="clear-search-text" [disabled]="!value?.value">
                         <mat-icon>close</mat-icon>
                     </button>
@@ -66,6 +59,12 @@
             </tbody>
         </table>
 
+        <mat-paginator [length]="totalCountries"
+            [pageSize]="initialPageSize"
+            [pageSizeOptions]="[25, 50, 100]" aria-label="Select countries range"
+            (page)="onPageChange($event)"
+            showFirstLastButtons>
+        </mat-paginator>
         <div *ngIf="loadingData" class="loading-spinner-container" data-cy="loading-spinner">
             <mat-spinner></mat-spinner>
             <span>Getting countries data. . .</span>
@@ -79,8 +78,8 @@
 
 <ng-template #countriesData>
     <ng-container *ngIf="paginatedCountriesData.length > 0;">
-        <ng-container *ngFor="let country of paginatedCountriesData; index as i">
-            <tr>
+        <ng-container *ngFor="let country of paginatedCountriesData;" >
+            <tr style="cursor: pointer;" (click)="findCountryAndUpdateUrlWhenRowIsClicked(country.name.common)">
                 <td class="flag-column-container">
                     <span style="display: inline-block;">
                         <img src={{country.flags.png}} alt='country-flat-image'>

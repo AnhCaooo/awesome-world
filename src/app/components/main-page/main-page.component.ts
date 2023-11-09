@@ -26,6 +26,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     option: [''],
     value: [{ value: '', disabled: true }] // maybe consider to have a validator here.
   })
+  countryFromUrl: string = ''
 
   get option() {
     return this.searchCountryForm.get('option');
@@ -35,24 +36,39 @@ export class MainPageComponent implements OnInit, OnDestroy {
     return this.searchCountryForm.get('value');
   }
 
-  constructor (
+  constructor(
     private countryService: RestCountriesService,
     private fb: FormBuilder,
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.option?.setValue(params['option']);
-      this.value?.setValue(params['search']);
-    });
+
   }
 
   ngOnInit(): void {
-  if (this.option?.value && this.value?.value) {
-    this.findCountry();
-  } else {
-    this.fetchCountries();
-  }
+    this.activatedRoute.queryParams.subscribe(params => {
+      if (params['option']) {
+        this.option?.setValue(params['option']);
+      }
+      if (params['search']) {
+        this.value?.setValue(params['search']);
+      }
+      if (params['country']) {
+        this.option?.setValue('none');
+        this.countryFromUrl = params['country'];
+      }
+      if (!params) {
+        this.option?.reset();
+        this.value?.reset();
+        this.countryFromUrl = '';
+        this.fetchCountries();
+      }
+    });
+    if (this.option?.value && this.value?.value) {
+      this.findCountry();
+    } else {
+      this.fetchCountries();
+    }
     this.validateSearchForm();
   }
 
@@ -60,33 +76,33 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.loadingData = true;
     const fetchCountriesSubscription$ = this.countryService.getCountries().subscribe({
       next: (response: any) => {
-        this.setCountriesValuesToVariables(response);
+        this.loadingData = false;
+        this.plainCountriesData = response;
+        this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+        this.setPaginatedPageData();
       },
       error: error => {
         console.error('Error while fetching countries:', error);
-        this.setCountriesValuesToVariables();
+        this.loadingData = false;
+        this.plainCountriesData = [];
+        this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+        this.setPaginatedPageData();
+      },
+      complete: () => {
+        if (this.option?.value === 'none' && this,this.countryFromUrl) {
+          this.findCountryAndUpdateUrlWhenRowIsClicked(this.countryFromUrl);
+        }
       }
     })
     this.subscription$.add(fetchCountriesSubscription$);
     this.updateUrl();
   }
 
-  private setCountriesValuesToVariables(response?: any[]) {
-    this.loadingData = false;
-    if (response) {
-      this.plainCountriesData = response;
-    } else {
-      this.plainCountriesData = [];
-    }
-    this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
-    this.getPaginatedPageData();
-  }
-
   private getAmountOfCountries(data: any[]): number {
     return data.length;
   }
 
-  private getPaginatedPageData(startIndex?: number, endIndex?: number) {
+  private setPaginatedPageData(startIndex?: number, endIndex?: number) {
     if (!startIndex) {
       startIndex = 0;
     }
@@ -117,7 +133,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
     // Update the table data based on the current page
     const startIndex = event.pageIndex * event.pageSize;
     const endIndex = startIndex + event.pageSize;
-    this.getPaginatedPageData(startIndex, endIndex);
+    this.setPaginatedPageData(startIndex, endIndex);
   }
 
   public findCountry() {
@@ -129,11 +145,17 @@ export class MainPageComponent implements OnInit, OnDestroy {
       }
       const fetchCountrySubscription$ = this.countryService.getCountries(this.value.value, isFullName).subscribe({
         next: (response: any) => {
-          this.setCountriesValuesToVariables(response);
+          this.loadingData = false;
+          this.plainCountriesData = response;
+          this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+          this.setPaginatedPageData();
         },
         error: error => {
           console.error('Error while fetching country:', error)
-          this.setCountriesValuesToVariables();
+          this.loadingData = false;
+          this.plainCountriesData = [];
+          this.totalCountries = this.getAmountOfCountries(this.plainCountriesData);
+          this.setPaginatedPageData();
         }
       })
       this.subscription$.add(fetchCountrySubscription$);
@@ -141,13 +163,20 @@ export class MainPageComponent implements OnInit, OnDestroy {
     this.updateUrl();
   }
 
-  private updateUrl() {
+  private updateUrl(countryName?: string) {
     let url: string = 'main';
     if (this.option?.value && this.value?.value) {
       url += `?option=${this.option?.value}&search=${this.value?.value}`;
     }
     this.router.navigateByUrl(url);
-}
+  }
+
+  public findCountryAndUpdateUrlWhenRowIsClicked(countryName: string) {
+    this.paginatedCountriesData = this.plainCountriesData.filter(country => country.name.common === countryName);
+    this.totalCountries = this.paginatedCountriesData.length;
+    const url = `main?country=${countryName}`;
+    this.router.navigateByUrl(url);
+  }
 
   /**
    *
@@ -160,8 +189,12 @@ export class MainPageComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  /**
+   *
+   * @returns true means disable button. False means enable
+   */
   public verifyClearSearchFormButton(): boolean {
-    if (this.option?.value && this.option?.value !== 'none') {
+    if (this.option?.value) {
       return false;
     }
     return true;
@@ -169,6 +202,7 @@ export class MainPageComponent implements OnInit, OnDestroy {
 
   public clearAndFetchAllCountries() {
     this.searchCountryForm.reset();
+    this.countryFromUrl = '';
     this.fetchCountries();
   }
 
@@ -204,7 +238,13 @@ export class MainPageComponent implements OnInit, OnDestroy {
     return Array.from(new Set(setList)).join(", ");
   }
   public formatPopulation(populationValue: any): string {
-    return String(populationValue).replace(/(.)(?=(\d{3})+$)/g,'$1.');
+    return String(populationValue).replace(/(.)(?=(\d{3})+$)/g, '$1.');
   }
 
+  public formatSnakeCaseToNormal(text: string): string {
+    const words = text.split("_");
+    const formattedWords = words.map((word) => word[0].toUpperCase() + word.slice(1));
+    const formattedText = formattedWords.join(" ");
+    return formattedText;
+  }
 }

@@ -31,6 +31,7 @@ tr:nth-child(even) {
 .search-filters-container {
     display: flex;
     margin-left: 20px;
+    margin-top: 20px;
 }
 
 .filter-option-container {
